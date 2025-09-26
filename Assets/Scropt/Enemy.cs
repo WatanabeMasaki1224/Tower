@@ -7,11 +7,13 @@ public class Enemy : MonoBehaviour
     public float speed = 1.0f;
     private List<Transform> wayPoint;
     private int wayPointIndex = 0;
+    public int hp = 5;
+    public int coin;
+    public int life;
 
     public void Setup(List<Transform> path)
     {
         wayPoint = path;
-        transform.position = wayPoint[0].position;
     }
 
     private void Update()
@@ -36,7 +38,23 @@ public class Enemy : MonoBehaviour
 
     void ReachGoal()
     {
-        // ƒS[ƒ‹“’B‚Ìˆ—
+        GameManager.Instance.LoseLife(life);
+        Destroy(gameObject);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Die();
+        }
+
+    }
+
+    void Die()
+    {
+        GameManager.Instance.AddCoins(coin);
         Destroy(gameObject);
     }
 }

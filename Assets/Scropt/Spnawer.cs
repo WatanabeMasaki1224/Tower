@@ -1,14 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[System.Serializable]
+public class Route   
+{
+    public List<Transform> waypoints = new List<Transform>();
+}
 
 public class Spnawer : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public Transform[] spawnPoints; // oŒ»ƒ|ƒCƒ“ƒg
-    public List<Transform>[] routes; // ƒ‹[ƒg”z—ñ‚ğSpawnPoint‚Æ“¯‚¶‡”Ô‚Å“o˜^
+    public Transform[] spawnPoints; // å‡ºç¾ãƒã‚¤ãƒ³ãƒˆ
+    public Route[] routes; // ãƒ«ãƒ¼ãƒˆé…åˆ—ã‚’SpawnPointã¨åŒã˜é †ç•ªã§ç™»éŒ²
     public float spawnInterval = 2f;
-    public int maxEnemies = 30; // Å‘å¶¬”
+    public int maxEnemies = 30; // æœ€å¤§ç”Ÿæˆæ•°
 
     void Start()
     {
@@ -18,19 +24,19 @@ public class Spnawer : MonoBehaviour
     IEnumerator SpawnRoutine()
     {
         int spawnIndex = 0;
-        int spawnedCount = 0; // ¶¬‚µ‚½“G‚ÌƒJƒEƒ“ƒ^[
+        int spawnedCount = 0; // ç”Ÿæˆã—ãŸæ•µã®ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
         while (spawnedCount < maxEnemies)
         {
             Transform spawn = spawnPoints[spawnIndex];
-            List<Transform> path = new List<Transform>(routes[spawnIndex]);
+            List<Transform> path = new List<Transform>(routes[spawnIndex].waypoints);
 
             GameObject enemyObj = Instantiate(enemyPrefab, spawn.position, Quaternion.identity);
             enemyObj.GetComponent<Enemy>().Setup(path);
 
             spawnIndex = (spawnIndex + 1) % spawnPoints.Length;
-            spawnedCount++; // ¶¬”‚ğ‘‚â‚·
+            spawnedCount++; // ç”Ÿæˆæ•°ã‚’å¢—ã‚„ã™
             yield return new WaitForSeconds(spawnInterval);
         }
-        Debug.Log("“G‚Ì¶¬‚ªI—¹‚µ‚Ü‚µ‚½");
+        Debug.Log("æ•µã®ç”ŸæˆãŒçµ‚äº†ã—ã¾ã—ãŸ");
     }
 }
